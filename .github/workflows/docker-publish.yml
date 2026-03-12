@@ -14,7 +14,7 @@ on:
 permissions:
   contents: read
   packages: write
-  
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -32,26 +32,14 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Extract metadata for Docker
         id: meta
-      - name: Extract metadata for Docker
-        id: meta
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/tristinecomplete/skills-publish-docker-images/stackoverflown
-
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          platforms: linux/amd64,linux/arm64
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            ghcr.io/tristinecomplete/skills-publish-docker-images/stackoverflown:main
-            ghcr.io/tristinecomplete/skills-publish-docker-images/stackoverflown:${{ github.sha }}
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
-            ghcr.io/tristinecomplete/skills-publish-docker-images/stackoverflown:main
-            ghcr.io/tristinecomplete/skills-publish-docker-images/stackoverflown:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
